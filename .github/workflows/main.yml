@@ -61,7 +61,7 @@ jobs:
         run: make build
         
       - name: pushover-alert
-        uses: slashk/pushover-alert@v0.1.0
+        uses: slashk/pushover-alert@master
         env:
           PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}
           PUSHOVER_USER: ${{ secrets.PUSHOVER_USER }}

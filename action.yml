@@ -1,6 +1,9 @@
 name: "pushover-alert"
 description: "Receive pushover alerts on your github repo events"
 author: "Ken Pepple <ken@pepple.info>"
+branding:
+  icon: 'send'
+  color: 'purple'
 inputs:
   pushover_rcpt:
     description: "Pushover Receipent"
@@ -28,4 +31,4 @@ inputs:
     required: false
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "docker://slashk/pushover-alert:latest"
