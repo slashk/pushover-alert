@@ -18,6 +18,7 @@ dockers:
     goos: linux
     goarch: amd64
     skip_push: false
+    dockerfile: Dockerfile.goreleaser
 checksum:
   name_template: "checksums.txt"
 snapshot:
