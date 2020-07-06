@@ -23,11 +23,11 @@ func createTitle(c map[string]string) string {
 	if c["title"] != "" {
 		return c["title"]
 	}
-	return "Title"
+	return fmt.Sprintf("%s %s on %s", fixName(c["name"]), c["ref"], c["repo"])
 }
 
 func createURL(c map[string]string) string {
-	return "https://github.com/slashk/pushover-alerts"
+	return "https://github.com/" + c["repo"]
 }
 
 // fixName restyles the github event name into proper english
