@@ -33,7 +33,7 @@ var overrideEvent = map[string]string{
 
 func Test_NormalMsg(t *testing.T) {
 	m := createMsg(normalEvent)
-	expected := "👍 Pull Request v1.0.0 from slashk/pushover-alert was success"
+	expected := "👍 Pull Request v1.0.0 from slashk/pushover-alert status: success"
 	if m != expected {
 		t.Errorf("expected: %v, got: %v", expected, m)
 	}
@@ -49,7 +49,7 @@ func Test_Override(t *testing.T) {
 
 func Test_FailureEvent(t *testing.T) {
 	m := createMsg(failedEvent)
-	expected := "👎 Pull Request v1.0.0 from slashk/pushover-alert was failure"
+	expected := "👎 Pull Request v1.0.0 from slashk/pushover-alert status: failure"
 	if m != expected {
 		t.Errorf("expected: %v, got: %v", expected, m)
 	}
