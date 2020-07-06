@@ -1,4 +1,4 @@
-package main
+package main // (c) 2020 ken pepple (ken@pepple.io)
 
 import (
 	"os"
@@ -23,42 +23,36 @@ func init() {
 	config["ref"] = os.Getenv("GITHUB_REF")
 	config["repo"] = os.Getenv("GITHUB_REPOSITORY")
 	config["status"] = os.Getenv("JOB_STATUS")
-}
 
-func getInputOrDie(g githubactions.Action, i string) string {
-	x := g.GetInput(i)
-	if x == "" {
-		g.Fatalf("Missing input: " + i)
-	}
-	return x
+	ga := githubactions.New()
+	config["pushoverRcpt"] = ga.GetInput("pushover_rcpt")   // os.Getenv("INPUT_PUSHOVER_RCPT")
+	config["pushoverToken"] = ga.GetInput("pushover_token") // os.Getenv("INPUT_PUSHOVER_TOKEN")
+	config["msg"] = ga.GetInput("msg")                      // os.Getenv("INPUT_MSG")
+	config["device"] = ga.GetInput("device")                // os.Getenv("INPUT_DEVICE")
+	config["title"] = ga.GetInput("title")                  // os.Getenv("INPUT_TITLE")
+	config["priority"] = ga.GetInput("priority")            // os.Getenv("INPUT_PRIORITY")
+	config["sound"] = ga.GetInput("sound")                  // os.Getenv("INPUT_SOUND")
 }
 
 func main() {
-	ga := githubactions.New()
+	var p pushoverNotification
 
-	// set input/output settings from action
-	// we can't set this in init as it breaks testings
-	config["pushoverRcpt"] = getInputOrDie(*ga, "pushover_rcpt")   // os.Getenv("INPUT_PUSHOVER_RCPT")
-	config["pushoverToken"] = getInputOrDie(*ga, "pushover_token") // os.Getenv("INPUT_PUSHOVER_TOKEN")
-	config["override"] = ga.GetInput("pushover_override")          // os.Getenv("INPUT_OVERRIDE_MSG")
-	p := pushoverCreds{
-		rcpt:  config["pushoverRcpt"],
-		token: config["pushoverToken"],
-	}
-	ga.Debugf("Configs set: %v", config)
+	g := githubactions.New()
+	g.Debugf("%v, commit %v, built at %v\n", version, commit, date)
+	g.AddMask(config["rcpt"])
+	g.AddMask(config["token"])
+	g.Debugf("Configs set: %v", config)
 
-	// compose alert according to event type
-	notification := pushoverNotification{
-		msg:   createMsg(config),
-		title: "Title",
-		url:   "https://github.com",
+	err := p.new(config)
+	if err != nil {
+		g.Fatalf("Error with pushover credentials: %s", err)
 	}
-	ga.Debugf("message: %s", notification)
+	g.Debugf("message: %v", p)
 
 	// send notification to device
-	o, err := p.notify(notification)
+	o, err := p.notify()
 	if err != nil {
-		ga.Fatalf("notification failed: %v", err)
+		g.Fatalf("notification failed: %v", err)
 	}
-	ga.Debugf("notification successful: %v", o)
+	g.Debugf("notification successful: %v", o)
 }

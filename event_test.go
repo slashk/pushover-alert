@@ -1,4 +1,4 @@
-package main
+package main // (c) 2020 ken pepple (ken@pepple.io)
 
 import (
 	"testing"

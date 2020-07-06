@@ -1,37 +1,63 @@
 package main // (c) 2020 ken pepple (ken@pepple.io)
 
 import (
-	"io"
-	"strings"
+	"errors"
+	"time"
 
 	"github.com/gregdel/pushover"
-	"github.com/parnurzeal/gorequest"
-	log "github.com/sirupsen/logrus"
+	"github.com/sethvargo/go-githubactions"
 )
 
 type pushoverNotification struct {
+	rcpt     string
+	token    string
 	msg      string
 	title    string
 	url      string
 	urlTitle string
+	device   string
+	sound    string
 }
 
-type pushoverCreds struct {
-	rcpt  string
-	token string
+func (p pushoverNotification) new(c map[string]string) error {
+	if p.rcpt == "" {
+		return errors.New("Pushover receipent input not set. Please add this into your action yaml file")
+	}
+	if p.token == "" {
+		return errors.New("Pushover token input not set. Please add this into your action yaml file")
+	}
+	// TODO	check recipient validity
+	// recipientDetails, err := app.GetRecipientDetails(recipient)
+	p = pushoverNotification{
+		rcpt:  c["pushoverRcpt"],
+		token: c["pushoverToken"],
+		msg:   createMsg(c),
+		title: createTitle(c),
+		url:   createURL(c),
+		sound: c["sound"],
+	}
+	if c["device"] != "" {
+		p.device = c["device"]
+	}
+	return nil
 }
 
-func (p pushoverCreds) notify(n pushoverNotification) (string, error) {
+func (p pushoverNotification) notify() (string, error) {
 	app := pushover.New(p.token)
 	recipient := pushover.NewRecipient(p.rcpt)
 
-	// TODO	set input for html and device
 	message := &pushover.Message{
-		Message:  n.msg,
-		Title:    n.title,
-		Priority: pushover.PriorityNormal,
-		URL:      n.url,
-		// URLTitle: "",
+		Message:   p.msg,
+		Title:     p.title,
+		Priority:  pushover.PriorityNormal,
+		URL:       p.url,
+		Sound:     p.sound,
+		HTML:      true,
+		URLTitle:  p.urlTitle,
+		Timestamp: time.Now().Unix(),
+	}
+	if p.device != "" {
+		message.DeviceName = p.device
 	}
 
 	// TODO figure out pictures
@@ -45,20 +71,21 @@ func (p pushoverCreds) notify(n pushoverNotification) (string, error) {
 
 	resp, err := app.SendMessage(message, recipient)
 	if err != nil {
-		log.Infof("notication error: %s", err.Error())
+		g := githubactions.New()
+		g.Fatalf("notication sending error: %s", err.Error())
 	}
 	return resp.String(), nil
 }
 
-func getPic(url string) (io.Reader, error) {
-	resp, body, errs := gorequest.New().Get(url).End()
-	if len(errs) > 0 {
-		log.Debugf("picture download error: %v", errs[0])
-		return nil, errs[0]
-	}
-	if resp.Status != "200 OK" {
-		log.Debugf("picture download error: %v status code", resp.Status)
-		return nil, nil
-	}
-	return strings.NewReader(body), nil
-}
+// func getPic(url string) (io.Reader, error) {
+// 	resp, body, errs := gorequest.New().Get(url).End()
+// 	if len(errs) > 0 {
+// 		log.Debugf("picture download error: %v", errs[0])
+// 		return nil, errs[0]
+// 	}
+// 	if resp.Status != "200 OK" {
+// 		log.Debugf("picture download error: %v status code", resp.Status)
+// 		return nil, nil
+// 	}
+// 	return strings.NewReader(body), nil
+// }
