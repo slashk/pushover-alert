@@ -38,7 +38,7 @@ func main() {
 	var p pushoverNotification
 
 	g := githubactions.New()
-	g.Debugf("%v, commit %v, built at %v\n", version, commit, date)
+	g.Warningf("%v, commit %v, built at %v\n", version, commit, date)
 	g.AddMask(config["pushoverRcpt"])
 	g.AddMask(config["pushoverToken"])
 	g.Debugf("Configs set: %v", config)
