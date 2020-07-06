@@ -1,0 +1,67 @@
+name: Build and Test
+
+# This workflow will run on master branch and on any pull requests targeting master
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2.0.3
+        with:
+          go-version: '^1.14'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Lint
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin # temporary fix. See https://github.com/actions/setup-go/issues/14
+          go get -u golang.org/x/lint/golint 
+          golint github.com/slashk/ghjob
+          
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2.0.3
+        with:
+          go-version: '^1.14'
+
+      - name: Print go version
+        run: go version
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Run Unit tests.
+        run: make test
+      
+  build:
+    name: Build
+    runs-on: ubuntu-latest 
+    needs: [lint, test]
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2.0.3
+        with:
+          go-version: '^1.14'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: make build
+        
+      - name: pushover-alert
+        uses: slashk/pushover-alert
+        env:
+          PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}
+          PUSHOVER_USER: ${{ secrets.PUSHOVER_USER }}
