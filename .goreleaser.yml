@@ -13,8 +13,8 @@ builds:
       - -s -w
 dockers:
   - image_templates:
-      - "slashk/pushover-alert:latest"
-      - "slashk/pushover-alert:{{ .Tag }}"
+      - "slashk/{{.ProjectName}}:latest"
+      - "slashk/{{.ProjectName}}:{{ .Tag }}"
     goos: linux
     goarch: amd64
     skip_push: false

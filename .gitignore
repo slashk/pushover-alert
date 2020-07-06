@@ -15,3 +15,6 @@
 # vendor/
 
 pushover-alert
+
+# goreleaser
+dist/
