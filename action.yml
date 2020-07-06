@@ -1,0 +1,31 @@
+name: "pushover-alert"
+description: "Receive pushover alerts on your github repo events"
+author: "Ken Pepple <ken@pepple.info>"
+inputs:
+  pushover_rcpt:
+    description: "Pushover Receipent"
+    default: ""
+    required: true
+  pushover_token:
+    description: "Pushover Token"
+    default: ""
+    required: true
+  msg:
+    description: "Override the default pushover message with this text"
+    default: ""
+    required: false
+  title:
+    description: "Override the default pushover title with this text"
+    default: ""
+    required: false
+  device:
+    description: "Send this message to the appropriate pushover device. Leave out for all devices."
+    default: ""
+    required: false
+  sound:
+    description: "Sound for the alert. See https://pushover.net/api#sounds for options."
+    default: "pushover"
+    required: false
+runs:
+  using: "docker"
+  image: "slashk/pushover-alert"
