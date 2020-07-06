@@ -19,12 +19,13 @@ type pushoverNotification struct {
 	sound    string
 }
 
-func (p pushoverNotification) new(c map[string]string) error {
+func newPushoverNotification(c map[string]string) (pushoverNotification, error) {
+	p := pushoverNotification{}
 	if c["pushoverRcpt"] == "" {
-		return errors.New("pushover recipient input (pushover_rcpt) not set")
+		return p, errors.New("pushover recipient input (pushover_rcpt) in action file not set")
 	}
 	if c["pushoverToken"] == "" {
-		return errors.New("pushover token input (pushover_token) not set")
+		return p, errors.New("pushover token input (pushover_token) in action file not set")
 	}
 	// TODO	check recipient validity
 	// recipientDetails, err := app.GetRecipientDetails(recipient)
@@ -39,10 +40,12 @@ func (p pushoverNotification) new(c map[string]string) error {
 	if c["device"] != "" {
 		p.device = c["device"]
 	}
-	return nil
+	return p, nil
 }
 
 func (p pushoverNotification) notify() (string, error) {
+	g := githubactions.New()
+
 	app := pushover.New(p.token)
 	recipient := pushover.NewRecipient(p.rcpt)
 
@@ -59,6 +62,7 @@ func (p pushoverNotification) notify() (string, error) {
 	if p.device != "" {
 		message.DeviceName = p.device
 	}
+	g.Debugf("notification: %v", p)
 
 	// TODO figure out pictures
 	// pic, err := getPic(s.image)
@@ -71,7 +75,6 @@ func (p pushoverNotification) notify() (string, error) {
 
 	resp, err := app.SendMessage(message, recipient)
 	if err != nil {
-		g := githubactions.New()
 		g.Fatalf("notication sending error: %s", err.Error())
 	}
 	return resp.String(), nil

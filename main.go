@@ -43,11 +43,11 @@ func main() {
 	g.AddMask(config["token"])
 	g.Debugf("Configs set: %v", config)
 
-	err := p.new(config)
+	p, err := newPushoverNotification(config)
 	if err != nil {
 		g.Fatalf("Error with pushover credentials: %s", err)
 	}
-	g.Debugf("message: %v", p)
+	g.Debugf("notification: %v", p)
 
 	// send notification to device
 	o, err := p.notify()
