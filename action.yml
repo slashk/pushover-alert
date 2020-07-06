@@ -5,8 +5,8 @@ branding:
   icon: 'send'
   color: 'purple'
 inputs:
-  pushover_rcpt:
-    description: "Pushover Receipent"
+  pushover_user:
+    description: "Pushover User/Receipent"
     default: ""
     required: true
   pushover_token:
