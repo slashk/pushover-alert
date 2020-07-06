@@ -6,18 +6,18 @@ import (
 
 func Test_CredCheckPositive(t *testing.T) {
 	var p pushoverNotification
-	var cfg map[string]string
-	cfg["rcpt"] = "sdfsdfsdf"
-	cfg["token"] = "sfsfsdgsdg"
+	cfg := make(map[string]string)
+	cfg["pushoverRcpt"] = "sdfsdfsdf"
+	cfg["pushoverToken"] = "sfsfsdgsdg"
 	if p.new(cfg) != nil {
 		t.Errorf("expected pushover creds: %v", p.new(cfg))
 	}
-	cfg["rcpt"] = ""
+	cfg["pushoverRcpt"] = ""
 	if p.new(cfg) == nil {
 		t.Errorf("expected pushover error: %v", p.new(cfg))
 	}
-	cfg["rcpt"] = "sdfsdfsdf"
-	cfg["token"] = ""
+	cfg["pushoverRcpt"] = "sdfsdfsdf"
+	cfg["pushoverToken"] = ""
 	if p.new(cfg) == nil {
 		t.Errorf("expected pushover creds: %v", p.new(cfg))
 	}

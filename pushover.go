@@ -20,11 +20,11 @@ type pushoverNotification struct {
 }
 
 func (p pushoverNotification) new(c map[string]string) error {
-	if p.rcpt == "" {
-		return errors.New("Pushover receipent input not set. Please add this into your action yaml file")
+	if c["pushoverRcpt"] == "" {
+		return errors.New("pushover recipient input (pushover_rcpt) not set")
 	}
-	if p.token == "" {
-		return errors.New("Pushover token input not set. Please add this into your action yaml file")
+	if c["pushoverToken"] == "" {
+		return errors.New("pushover token input (pushover_token) not set")
 	}
 	// TODO	check recipient validity
 	// recipientDetails, err := app.GetRecipientDetails(recipient)
