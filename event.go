@@ -14,7 +14,7 @@ func createMsg(c map[string]string) string {
 	if c["msg"] != "" {
 		return c["msg"]
 	}
-	m := fmt.Sprintf("%s %s %s from %s status: %s",
+	m := fmt.Sprintf("%s <b>%s</b> %s from %s status: %s",
 		icon[c["status"]], fixName(c["name"]), c["ref"], c["repo"], c["status"])
 	return m
 }
