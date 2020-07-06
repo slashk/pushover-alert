@@ -25,7 +25,7 @@ func init() {
 	config["status"] = os.Getenv("JOB_STATUS")
 
 	ga := githubactions.New()
-	config["pushoverRcpt"] = ga.GetInput("pushover_rcpt")   // os.Getenv("INPUT_PUSHOVER_RCPT")
+	config["pushoverRcpt"] = ga.GetInput("pushover_user")   // os.Getenv("INPUT_PUSHOVER_USER")
 	config["pushoverToken"] = ga.GetInput("pushover_token") // os.Getenv("INPUT_PUSHOVER_TOKEN")
 	config["msg"] = ga.GetInput("msg")                      // os.Getenv("INPUT_MSG")
 	config["device"] = ga.GetInput("device")                // os.Getenv("INPUT_DEVICE")
