@@ -39,8 +39,8 @@ func main() {
 
 	g := githubactions.New()
 	g.Debugf("%v, commit %v, built at %v\n", version, commit, date)
-	g.AddMask(config["rcpt"])
-	g.AddMask(config["token"])
+	g.AddMask(config["pushoverRcpt"])
+	g.AddMask(config["pushoverToken"])
 	g.Debugf("Configs set: %v", config)
 
 	p, err := newPushoverNotification(config)

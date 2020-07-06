@@ -11,8 +11,8 @@ func createMsg(c map[string]string) string {
 		"failure":   "👎",
 		"cancelled": "🤚",
 	}
-	if c["override"] != "" {
-		return c["override"]
+	if c["msg"] != "" {
+		return c["msg"]
 	}
 	m := fmt.Sprintf("%s %s %s from %s was %s",
 		icon[c["status"]], fixName(c["name"]), c["ref"], c["repo"], c["status"])

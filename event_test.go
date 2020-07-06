@@ -5,30 +5,30 @@ import (
 )
 
 var normalEvent = map[string]string{
-	"override": "",
-	"name":     "pull_request",
-	"sha":      "00573ba",
-	"ref":      "v1.0.0",
-	"repo":     "slashk/pushover-alert",
-	"status":   "success",
+	"msg":    "",
+	"name":   "pull_request",
+	"sha":    "00573ba",
+	"ref":    "v1.0.0",
+	"repo":   "slashk/pushover-alert",
+	"status": "success",
 }
 
 var failedEvent = map[string]string{
-	"override": "",
-	"name":     "pull_request",
-	"sha":      "00573ba",
-	"ref":      "v1.0.0",
-	"repo":     "slashk/pushover-alert",
-	"status":   "failure",
+	"msg":    "",
+	"name":   "pull_request",
+	"sha":    "00573ba",
+	"ref":    "v1.0.0",
+	"repo":   "slashk/pushover-alert",
+	"status": "failure",
 }
 
 var overrideEvent = map[string]string{
-	"override": "This is a override message",
-	"name":     "pull_request",
-	"sha":      "00573ba",
-	"ref":      "v1.0.0",
-	"repo":     "slashk/pushover-alert",
-	"status":   "success",
+	"msg":    "This is a override message",
+	"name":   "pull_request",
+	"sha":    "00573ba",
+	"ref":    "v1.0.0",
+	"repo":   "slashk/pushover-alert",
+	"status": "success",
 }
 
 func Test_NormalMsg(t *testing.T) {
@@ -41,7 +41,7 @@ func Test_NormalMsg(t *testing.T) {
 
 func Test_Override(t *testing.T) {
 	m := createMsg(overrideEvent)
-	expected := overrideEvent["override"]
+	expected := overrideEvent["msg"]
 	if m != expected {
 		t.Errorf("expected: %v, got: %v", expected, m)
 	}
