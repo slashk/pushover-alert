@@ -1,0 +1,30 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+project_name: pushover-alert
+before:
+  hooks:
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w
+dockers:
+  - image_templates:
+      - "slashk/pushover-alert:latest"
+      - "slashk/pushover-alert:{{ .Tag }}"
+    goos: linux
+    goarch: amd64
+    skip_push: false
+checksum:
+  name_template: "checksums.txt"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
