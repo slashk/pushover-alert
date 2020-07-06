@@ -62,6 +62,6 @@ jobs:
         
       - name: pushover-alert
         uses: slashk/pushover-alert@master
-        env:
+        with:
           PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}
           PUSHOVER_USER: ${{ secrets.PUSHOVER_USER }}

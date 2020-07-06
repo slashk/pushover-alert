@@ -47,7 +47,7 @@ func main() {
 	if err != nil {
 		g.Fatalf("Error with pushover credentials: %s", err)
 	}
-	g.Debugf("notification: %v", p)
+	g.Warningf("notification: %v", p)
 
 	// send notification to device
 	o, err := p.notify()
