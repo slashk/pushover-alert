@@ -28,4 +28,4 @@ inputs:
     required: false
 runs:
   using: "docker"
-  image: "slashk/pushover-alert"
+  image: "Dockerfile"
