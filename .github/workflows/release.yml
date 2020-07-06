@@ -37,3 +37,5 @@ jobs:
         with:
           PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}
           PUSHOVER_USER: ${{ secrets.PUSHOVER_USER }}
+        env:
+          JOB_STATUS: ${{ job.status }}

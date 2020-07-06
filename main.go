@@ -18,10 +18,12 @@ func init() {
 	config = make(map[string]string)
 
 	// set Github action event variables
-	config["eventName"] = os.Getenv("GITHUB_EVENT_NAME")
+	config["name"] = os.Getenv("GITHUB_EVENT_NAME")
 	config["sha"] = os.Getenv("GITHUB_SHA")
 	config["ref"] = os.Getenv("GITHUB_REF")
 	config["repo"] = os.Getenv("GITHUB_REPOSITORY")
+	config["path"] = os.Getenv("GITHUB_EVENT_PATH")
+	config["action"] = os.Getenv("GITHUB_ACTION")
 	config["status"] = os.Getenv("JOB_STATUS")
 
 	ga := githubactions.New()
